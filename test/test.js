@@ -4,7 +4,7 @@ const app = require("../server")
 
 describe("URL Shortening Service", () => {
   it("should retrieve short URLs", (done) => {
-    request(app).get("/").expect(200)
+    request(app).get("/api").expect(200)
       .end((err, res) => {
         if (err) return done(err)
         expect(res.body).to.have.property("shortUrls").to.be.an("array")
@@ -14,8 +14,7 @@ describe("URL Shortening Service", () => {
 
   it("should create a short URL", (done) => {
     const validURL = "https://example.com"
-
-    request(app).post("/shortUrls").send({ fullUrl: validURL })
+    request(app).post("/api/shortUrls").send({ fullUrl: validURL })// have noe done token implemntation yet
       .expect(302)
       .end((err, res) => {
         if (err) return done(err)
@@ -24,9 +23,9 @@ describe("URL Shortening Service", () => {
   })
 
   it("should redirect to the original URL for a valid short URL", (done) => {
-    const validShortURL = "qmKwtX"
+    const validShortURL = "owFDBr"
 
-    request(app).get(`/${validShortURL}`).expect(302) 
+    request(app).get(`/api/${validShortURL}`).expect(302) 
       .end((err, res) => {
         if (err) return done(err)
         done()
